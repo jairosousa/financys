@@ -1,1 +1,20 @@
 ng new financys --routing --skip-tests
+
+DEPENDENCIAS
+npm i bootstrap jquery --save
+
+npm i angular-imask --save
+
+npm i currency-formatter --save
+
+npm i moment --save
+
+npm i toastr --save
+
+npm install primeng --save
+
+npm install primeicons --save
+
+npm install chart.js --save // graficos
+
+npm install in-memory-web-api --save  / simula back-end
