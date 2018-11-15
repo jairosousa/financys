@@ -14,35 +14,85 @@
   </div>
   <div class="col-md-3">
     <a [routerLink]="['/entries']" class="btn btn-light float-right">
-      << Voltar
+       << <span> Voltar </span>
     </a> 
-  </div> 
-</div> 
+  </div>
+</div>
+
 <form [formGroup]="form" (submit)="submitForm()">
-        <div class="card">
-          <div class="card-header">
-            Informações sobre o Lançamento
-          </div>
-          <div class="card-body">
-            <div class="form-row">
-              <div class="formGroup col-md-4">
-                <label for="name">Nome</label>
-                <input id="name" class="form-control" type="text" formControlName="name">
-                <div class="text-danger" *ngIf="form.get('name').invalid && form.get('name').touched">
-                  <div *ngIf="form.get('name').errors.required"><span>Dado obrigatório</span></div>
-                  <div *ngIf="form.get('name').errors.minlength"><span>Deve ter no mínimo 2 caracteres</span></div>
-                </div>
-              </div>
-              <div class="formGroup col-md-8">
-                <label for="description">Descrição</label>
-                <input id="description" class="form-control" type="text" formControlName="description">
-              </div>
-            </div>
-          </div>
-          <div class="card-footer">
-            <button [disabled]="submittingForm || form.invalid" class="btn btn-primary btn-lg float-right" type="submit">Salvar</button>
+  <div class="card">
+    <div class="card-header">
+      Informações sobre o Lançamento
+    </div>
+    <div class="card-body">
+      <!-- type -->
+      <div class="form-row">
+        <div class="formGroup col-md-2">
+          <label for="type">Tipo</label>
+          <select name="type" id="type" class="form-control" formControlName="type">
+            <!-- <option *ngFor="let item of list" [value]="item">{{item}}</option> -->
+            <option value="expense">Despesa</option>
+            <option value="revenue">Receita</option>
+          </select>
+          <div class="text-danger" *ngIf="form.get('type').invalid && form.get('type').touched">
+            <div *ngIf="form.get('type').errors.required"><span>Dado obrigatório</span></div>
           </div>
         </div>
+        <!-- Nome -->
+        <div class="formGroup col-md-5">
+          <label for="name">Lançamento</label>
+          <input id="name" class="form-control" type="text" formControlName="name">
+          <div class="text-danger" *ngIf="form.get('name').invalid && form.get('name').touched">
+            <div *ngIf="form.get('name').errors.required"><span>Dado obrigatório</span></div>
+            <div *ngIf="form.get('name').errors.minlength"><span>Deve ter no mínimo 2 caracteres</span></div>
+          </div>
+        </div>
+
+        <!-- Valor -->
+        <div class="formGroup col-md-3">
+          <label for="amount">Valor</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">R$</span>
+            </div>
+            <input [imask]="imaskConfig" id="amount" class="form-control text-right" type="text" formControlName="amount">
+          </div>
+          <div class="text-danger" *ngIf="form.get('amount').invalid && form.get('amount').touched">
+            <div *ngIf="form.get('amount').errors.required"><span>Dado obrigatório</span></div>
+          </div>
+        </div>
+
+        <!-- Valor -->
+        <div class="formGroup col-md-2">
+          <label for="date">Data</label>
+          <p-calendar
+            id="date"
+            formControlName="date"
+            inputStyleClass="form-control"
+            dataType="string"
+            dateFormat="dd/mm/yy"
+            [locale]="ptBR"
+            [showButtonBar]="true">
+          </p-calendar>
+          <div class="text-danger" *ngIf="form.get('amount').invalid && form.get('date').touched">
+            <div *ngIf="form.get('date').errors.required"><span>Dado obrigatório</span></div>
+          </div>
+        </div>
+
+      </div>
+      <div class="form-row">
+        
+        <!-- Descrição -->
+        <div class="formGroup col-md-8">
+          <label for="description">Descrição</label>
+          <input id="description" class="form-control" type="text" formControlName="description">
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <button [disabled]="submittingForm || form.invalid" class="btn btn-primary btn-lg float-right" type="submit">Salvar</button>
+    </div>
+  </div>
 </form>
 
 <div class="alert alert-danger mt-5" *ngIf="serverErrorMenssages">
