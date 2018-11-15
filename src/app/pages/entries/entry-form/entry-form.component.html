@@ -30,9 +30,7 @@
         <div class="formGroup col-md-2">
           <label for="type">Tipo</label>
           <select name="type" id="type" class="form-control" formControlName="type">
-            <!-- <option *ngFor="let item of list" [value]="item">{{item}}</option> -->
-            <option value="expense">Despesa</option>
-            <option value="revenue">Receita</option>
+            <option *ngFor="let option of typeOptions" [value]="option.value">{{option.text}}</option>
           </select>
           <div class="text-danger" *ngIf="form.get('type').invalid && form.get('type').touched">
             <div *ngIf="form.get('type').errors.required"><span>Dado obrigatório</span></div>
@@ -97,9 +95,7 @@
         <div class="formGroup col-md-3">
           <label for="categoryId">Tipo</label>
           <select name="categoryId" id="categoryId" class="form-control" formControlName="categoryId">
-            <!-- <option *ngFor="let item of list" [value]="item">{{item}}</option> -->
-            <option value="1">Categoria 1</option>
-            <option value="2">Categoria 2</option>
+            <option *ngFor="let category of categories" [value]="category.id">{{category.name}}</option>
           </select>
           <div class="text-danger" *ngIf="form.get('categoryId').invalid && form.get('categoryId').touched">
             <div class="text-danger" *ngIf="form.get('categoryId').errors.required"><span>Dado obrigatório</span></div>
