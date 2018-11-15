@@ -14,7 +14,11 @@
   </div>
   <div class="col-md">
     <a [routerLink]="['/categories']" class="btn btn-light float-right">
-      << Voltar</a> </div> </div> <form [formGroup]="categoryForm" (submit)="submitForm()">
+      << Voltar
+    </a> 
+  </div> 
+</div> 
+<form [formGroup]="categoryForm" (submit)="submitForm()">
         <div class="card">
           <div class="card-header">
             Informações sobre a Categoria
@@ -39,4 +43,12 @@
             <button [disabled]="submittingForm || categoryForm.invalid" class="btn btn-primary btn-lg float-right" type="submit">Salvar</button>
           </div>
         </div>
-        </form>
+</form>
+
+<div class="alert alert-danger mt-5" *ngIf="serverErrorMenssages">
+  <strong>Erro no Servidor: </strong>
+
+  <ul class="list-action">
+    <li *ngFor="let error of serverErrorMenssages">{{error}}</li>
+  </ul>
+</div>
