@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Category } from '../shared/category.model';
 
 import { switchMap } from 'rxjs/operators';
-import { toastr } from 'toastr';
+import toastr from 'toastr';
 import { CategoryService } from '../shared/category.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -35,9 +35,18 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
     this.loadCategory();
   }
 
+  public submitForm() {
+    this.submittingForm = true;
+    if (this.currentAction == 'new') {
+      this.createCategory();
+    } else {
+      this.updateCategory();
+    }
+  }
+
   // PRIVATE METHODOS
   private setCurrentyAction() {
-    if (this.route.snapshot.url[0].path === 'new') {
+    if (this.route.snapshot.url[0].path == 'new') {
       this.currentAction = 'new';
     } else {
       this.currentAction = 'edit';
@@ -72,6 +81,41 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
     } else {
       const categoryName = this.category.name || '';
       this.pageTitle = 'Editando categoria: ' + categoryName;
+    }
+  }
+
+  private createCategory() {
+    const category: Category = Object.assign(new Category(), this.categoryForm.value);
+    this.categoryserve.create(category)
+      .subscribe( category => this.actionsForSucess(category),
+        error => this.actionsFormError(error)
+      );
+  }
+  private updateCategory() {
+    const category: Category = Object.assign(new Category(), this.categoryForm.value);
+    this.categoryserve.update(category)
+      .subscribe(category => this.actionsForSucess(category),
+        error => this.actionsFormError(error)
+      );
+  }
+
+  // Redicet/reload component page
+  private actionsForSucess(category: Category) {
+    toastr.success('Solicitação processada com sucesso');
+
+    this.router.navigateByUrl('categories', { skipLocationChange: true })
+      .then(
+        () => this.router.navigate(['categories', category.id, 'edit'])
+      );
+  }
+
+  private actionsFormError(error) {
+    toastr.error('Ocorreu um erro ao processar a sua solicitação');
+    this.submittingForm = false;
+    if (error.status === 422) {
+      this.serverErrorMenssages = JSON.parse(error._body).errors;
+    } else {
+      this.serverErrorMenssages = ['Falha na Comunicação com o servidor. Por favor tente mais tarde.'];
     }
   }
 
