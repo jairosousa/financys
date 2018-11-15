@@ -28,14 +28,14 @@ export class CategoryService {
     const url = `${this.apiPath}/${id}`;
     return this.http.get(url).pipe(
       catchError(this.handleError),
-      map(this.jsonDataToCategoy)
+      map(this.jsonDataToCategory)
     );
   }
 
   create(category: Category): Observable<Category> {
     return this.http.post(this.apiPath, category).pipe(
       catchError(this.handleError),
-      map(this.jsonDataToCategoy)
+      map(this.jsonDataToCategory)
     );
   }
 
@@ -56,7 +56,7 @@ export class CategoryService {
   }
 
   // PRIVATE METHODES
-  private jsonDataToCategoy(jsonData: any): Category {
+  private jsonDataToCategory(jsonData: any): Category {
     return jsonData as Category;
   }
 
