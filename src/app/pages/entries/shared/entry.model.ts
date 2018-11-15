@@ -1,5 +1,4 @@
 import { Category } from '../../categories/shared/category.model';
-
 export class Entry {
     constructor(
         public id?: number,
@@ -9,7 +8,7 @@ export class Entry {
         public amount?: string,
         public date?: string,
         public paid?: boolean,
-        public categoriaId?: number,
+        public categoryId?: number,
         public category?: Category,
     ) { }
 

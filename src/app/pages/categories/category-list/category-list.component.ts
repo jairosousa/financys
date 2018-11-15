@@ -12,11 +12,11 @@ export class CategoryListComponent implements OnInit {
   categories: Category[] = [];
 
   constructor(
-    private categoriaService: CategoryService
+    private categoryService: CategoryService
   ) { }
 
   ngOnInit() {
-    this.categoriaService.getAll()
+    this.categoryService.getAll()
       .subscribe(
         categories => this.categories = categories,
         error => alert('Erro ao carregar alista')
@@ -26,7 +26,7 @@ export class CategoryListComponent implements OnInit {
   delete(category: Category) {
     const mustDelete = confirm('Deseja realmente excluir este item?');
     if (mustDelete) {
-      this.categoriaService.delete(category.id)
+      this.categoryService.delete(category.id)
         .subscribe(
           () => this.categories = this.categories.filter(element => element !== category),
           () => alert('Erro ao excluir')
