@@ -1,12 +1,12 @@
-import { Component, OnInit, AfterContentChecked } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
+import {Component, OnInit, AfterContentChecked} from '@angular/core';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {switchMap} from 'rxjs/operators';
+import {Entry} from '../shared/entry.model';
 import toastr from 'toastr';
-import { Entry } from '../shared/entry.model';
-import { Category } from '../../categories/shared/category.model';
-import { EntryService } from '../shared/entry.service';
-import { CategoryService } from '../../categories/shared/category.service';
+import {Category} from '../../categories/shared/category.model';
+import {EntryService} from '../shared/entry.service';
+import {CategoryService} from '../../categories/shared/category.service';
 
 @Component({
   selector: 'app-entry-form',
@@ -52,7 +52,8 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
     private route: ActivatedRoute,
     private router: Router,
     private formBuilder: FormBuilder
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.setCurrentyAction();
@@ -139,6 +140,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
         error => this.actionsFormError(error)
       );
   }
+
   private updateEntry() {
     const entry: Entry = Entry.fromJson(this.form.value);
     this.entryServe.update(entry)
@@ -151,7 +153,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
   private actionsForSucess(entry: Entry) {
     toastr.success('Solicitação processada com sucesso');
 
-    this.router.navigateByUrl('entries', { skipLocationChange: true })
+    this.router.navigateByUrl('entries', {skipLocationChange: true})
       .then(
         () => this.router.navigate(['entries', entry.id, 'edit'])
       );
