@@ -29,89 +29,97 @@ export abstract class BseResourceFormComponent<T extends BaseResourceModel> impl
         this.route = this.injector.get(ActivatedRoute);
         this.router = this.injector.get(Router);
         this.formBuilder = this.injector.get(FormBuilder);
-     }
+    }
 
     ngOnInit() {
         this.setCurrentyAction();
-        this.buildCategoryFrom();
-        this.loadCategory();
+        this.buildResourceForm();
+        this.loadResource();
+    }
+
+    ngAfterContentChecked(): void {
+        this.setPageTitle();
     }
 
     public submitForm() {
         this.submittingForm = true;
-        if (this.currentAction == 'new') {
-            this.createCategory();
+        if (this.currentAction === 'new') {
+            this.createResource();
         } else {
-            this.updateCategory();
+            this.updateResource();
         }
     }
 
-    // PRIVATE METHODOS
-    private setCurrentyAction() {
-        if (this.route.snapshot.url[0].path == 'new') {
+    // PROTECTED METHODOS
+    protected setCurrentyAction() {
+        if (this.route.snapshot.url[0].path === 'new') {
             this.currentAction = 'new';
         } else {
             this.currentAction = 'edit';
         }
     }
 
-    private buildCategoryFrom() {
-        this.categoryForm = this.formBuilder.group({
-            id: [null],
-            name: [null, [Validators.required, Validators.minLength(2)]],
-            description: [null]
-        });
-    }
-
-    private loadCategory(): any {
+    protected loadResource(): any {
         if (this.currentAction === 'edit') {
             this.route.paramMap.pipe(
-                switchMap(params => this.categoryserve.getById(+params.get('id')))
+                switchMap(params => this.resourceService.getById(+params.get('id')))
             ).subscribe(
-                (category) => {
-                    this.category = category;
-                    this.categoryForm.patchValue(category); // bind losder category data to categoryForm
+                (resource) => {
+                    this.resource = resource;
+                    this.resourceForm.patchValue(resource); // bind losder resource data to categoryForm
                 },
                 (error) => alert('Ocorreu um erro no servidor, tente mais tarde')
             );
         }
     }
 
-    private setPageTitle(): any {
+    protected setPageTitle(): any {
         if (this.currentAction === 'new') {
-            this.pageTitle = 'Cadastro de Nova categoria';
+            this.pageTitle = this.createPageTitle();
         } else {
-            const categoryName = this.category.name || '';
-            this.pageTitle = 'Editando categoria: ' + categoryName;
+            this.pageTitle = this.editionPageTitle();
         }
     }
 
-    private createCategory() {
-        const category: Category = Object.assign(new Category(), this.categoryForm.value);
-        this.categoryserve.create(category)
-            .subscribe(category => this.actionsForSucess(category),
-                error => this.actionsFormError(error)
-            );
-    }
-    private updateCategory() {
-        const category: Category = Object.assign(new Category(), this.categoryForm.value);
-        this.categoryserve.update(category)
-            .subscribe(category => this.actionsForSucess(category),
-                error => this.actionsFormError(error)
-            );
+    protected createPageTitle(): string {
+        return 'Novo';
     }
 
+    protected editionPageTitle(): string {
+        return 'Edição';
+    }
+
+    protected createResource() {
+        const resource: T = this.jsonDataToResourceFn(this.resourceForm.value);
+        this.resourceService.create(resource)
+            .subscribe(
+                // tslint:disable-next-line:no-shadowed-variable
+                resource => this.actionsForSucess(resource),
+                error => this.actionsFormError(error)
+            );
+    }
+    protected updateResource() {
+        const resource: T = this.jsonDataToResourceFn(this.resourceForm.value);
+        this.resourceService.update(resource)
+            .subscribe(
+                // tslint:disable-next-line:no-shadowed-variable
+                resource => this.actionsForSucess(resource),
+                error => this.actionsFormError(error)
+            );
+    }
     // Redicet/reload component page
-    private actionsForSucess(category: Category) {
+    protected actionsForSucess(resource: T) {
         toastr.success('Solicitação processada com sucesso');
 
-        this.router.navigateByUrl('categories', { skipLocationChange: true })
+        const baseComponentPath = this.route.snapshot.parent.url[0].path;
+
+        this.router.navigateByUrl(baseComponentPath, { skipLocationChange: true })
             .then(
-                () => this.router.navigate(['categories', category.id, 'edit'])
+                () => this.router.navigate([baseComponentPath, resource.id, 'edit'])
             );
     }
 
-    private actionsFormError(error) {
+    protected actionsFormError(error) {
         toastr.error('Ocorreu um erro ao processar a sua solicitação');
         this.submittingForm = false;
         if (error.status === 422) {
@@ -121,9 +129,5 @@ export abstract class BseResourceFormComponent<T extends BaseResourceModel> impl
         }
     }
 
-    ngAfterContentChecked(): void {
-        this.setPageTitle();
-    }
-
-
+    protected abstract buildResourceForm(): void;
 }
