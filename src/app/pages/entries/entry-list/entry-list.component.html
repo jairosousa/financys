@@ -16,7 +16,7 @@
     </h1>
   </div>
   <div class="col-md">
-    <a [routerLink]="['new']" class="btn btn-success float-right" >+ Novo Lançamentos</a>
+    <a [routerLink]="['new']" class="btn btn-success float-right">+ Novo Lançamentos</a>
   </div>
 </div>
 
@@ -30,7 +30,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let entry of entries">
+    <tr *ngFor="let entry of resources">
       <td>
         <strong>{{ entry.name }}</strong><br>
         <small class="text-success">{{entry.date}}</small><br>
@@ -51,7 +51,7 @@
       </td>
       <td class="text-center">
         <a [routerLink]="[entry.id, 'edit']" class="btn btn-outline-info btn-sm mr-2">Editar</a>
-        <button (click)="delete(entry)" class="btn btn-outline-danger btn-sm">Excluir</button>
+        <button (click)="deleteResource(entry)" class="btn btn-outline-danger btn-sm">Excluir</button>
       </td>
       
     </tr>
