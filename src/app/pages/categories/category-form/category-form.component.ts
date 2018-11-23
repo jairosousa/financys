@@ -3,14 +3,14 @@ import { Validators } from '@angular/forms';
 
 import { Category } from '../shared/category.model';
 import { CategoryService } from '../shared/category.service';
-import { BseResourceFormComponent } from 'src/app/shared/components/base-resource-form/base-resource-form.component';
+import { BaseResourceFormComponent } from 'src/app/shared/components/base-resource-form/base-resource-form.component';
 
 @Component({
   selector: 'app-category-form',
   templateUrl: './category-form.component.html',
   styleUrls: ['./category-form.component.css']
 })
-export class CategoryFormComponent extends BseResourceFormComponent<Category> {
+export class CategoryFormComponent extends BaseResourceFormComponent<Category> {
 
   constructor(
     protected categoryService: CategoryService,
