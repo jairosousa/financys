@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormControl, NgForm } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-form-field-error',
@@ -21,7 +21,7 @@ export class FormFieldErrorComponent implements OnInit {
   }
 
   public get errorMessage(): string | null {
-    if (this.mustShowErrorMessage) {
+    if (this.mustShowErrorMessage()) {
       return this.getErrormessage();
     } else {
       return null;
