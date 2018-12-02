@@ -7,7 +7,7 @@
   button-text="<< Voltar" 
   button-link="/entries" 
   button-class="btn-light"
-  ></app-page-header>
+></app-page-header>
 
 <form [formGroup]="resourceForm" (submit)="submitForm()">
   <div class="card">
@@ -34,7 +34,7 @@
             <div *ngIf="resourceForm.get('name').errors.required"><span>Dado obrigatório</span></div>
             <div *ngIf="resourceForm.get('name').errors.minlength"><span>Deve ter no mínimo 2 caracteres</span></div>
           </div>
-        </div>
+        </div> 
 
         <!-- Valor -->
         <div class="formGroup col-md-3">
@@ -113,6 +113,6 @@
   </ul>
 </div>
 
-<pre>
+<!-- <pre>
   {{resourceForm.value | json}}
-</pre>
+</pre> -->
