@@ -1,43 +1,29 @@
-<app-bread-crumb
-  [items]="[{texto: 'Categorias', link: '/categories'}, {texto: pageTitle}]"
-></app-bread-crumb>
+<app-bread-crumb [items]="[{texto: 'Categorias', link: '/categories'}, {texto: pageTitle}]"></app-bread-crumb>
 
-<app-page-header
-  [page-title]="pageTitle"
-  button-text="<< Voltar"
-  button-link="/categories"
-  button-class="btn-light"
-  ></app-page-header>
- 
+<app-page-header [page-title]="pageTitle" button-text="<< Voltar" button-link="/categories" button-class="btn-light"></app-page-header>
+
 <form [formGroup]="resourceForm" (submit)="submitForm()">
-        <div class="card">
-          <div class="card-header">
+    <div class="card">
+        <div class="card-header">
             Informações sobre a Categoria
-          </div>
-          <div class="card-body">
-            <div class="form-row">
-              <div class="formGroup col-md-4">
-                <label for="name">Nome</label>
-                <input id="name" class="form-control" type="text" formControlName="name">
-                <app-form-field-error [form-control]="resourceForm.get('name')"></app-form-field-error>
-            </div>
-              <div class="formGroup col-md-8">
-                <label for="description">Descrição</label>
-                <input id="description" class="form-control" type="text" formControlName="description">
-                <app-form-field-error [form-control]="resourceForm.get('description')"></app-form-field-error>
-              </div>
-            </div>
-          </div>
-          <div class="card-footer">
-            <button [disabled]="submittingForm || resourceForm.invalid" class="btn btn-primary btn-lg float-right" type="submit">Salvar</button>
-          </div>
         </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="formGroup col-md-4">
+                    <label for="name">Nome</label>
+                    <input id="name" class="form-control" type="text" formControlName="name">
+                    <app-form-field-error [form-control]="resourceForm.get('name')"></app-form-field-error>
+                </div>
+                <div class="formGroup col-md-8">
+                    <label for="description">Descrição</label>
+                    <input id="description" class="form-control" type="text" formControlName="description">
+                    <app-form-field-error [form-control]="resourceForm.get('description ')"></app-form-field-error>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button [disabled]="submittingForm || resourceForm.invalid" class="btn btn-primary btn-lg float-right" type="submit">Salvar</button>
+        </div>
+    </div>
 </form>
-
-<div class="alert alert-danger mt-5" *ngIf="serverErrorMenssages">
-  <strong>Erro no Servidor: </strong>
-
-  <ul class="list-action">
-    <li *ngFor="let error of serverErrorMenssages">{{error}}</li>
-  </ul>
-</div>
+<app-server-error-messages [server-error-menssages]="serverErrorMenssages"></app-server-error-messages>

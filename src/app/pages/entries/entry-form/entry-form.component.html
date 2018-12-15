@@ -1,113 +1,94 @@
-<app-bread-crumb 
-    [items]="[ {texto: 'Lançamentos', link: '/entries' }, { texto: pageTitle }]">
+<app-bread-crumb [items]="[ {texto: 'Lançamentos', link: '/entries' }, { texto: pageTitle }]">
 </app-bread-crumb>
 
-<app-page-header 
-  [page-title]="pageTitle" 
-  button-text="<< Voltar" 
-  button-link="/entries" 
-  button-class="btn-light"
-></app-page-header>
+<app-page-header [page-title]="pageTitle" button-text="<< Voltar" button-link="/entries" button-class="btn-light"></app-page-header>
 
 <form [formGroup]="resourceForm" (submit)="submitForm()">
-  <div class="card">
-    <div class="card-header">
-      Informações sobre o Lançamento
-    </div>
-    <div class="card-body">
-      <!-- type -->
-      <div class="form-row">
-        <div class="formGroup col-md-2">
-          <label for="type">Tipo</label>
-          <select name="type" id="type" class="form-control" formControlName="type">
+    <div class="card">
+        <div class="card-header">
+            Informações sobre o Lançamento
+        </div>
+        <div class="card-body">
+            <!-- type -->
+            <div class="form-row">
+                <div class="formGroup col-md-2">
+                    <label for="type">Tipo</label>
+                    <select name="type" id="type" class="form-control" formControlName="type">
             <option *ngFor="let option of typeOptions" [value]="option.value">{{option.text}}</option>
           </select>
 
-          <app-form-field-error [form-control]="resourceForm.get('type')"></app-form-field-error>
-         
-        </div>
-        <!-- Nome -->
-        <div class="formGroup col-md-5">
-          <label for="name">Lançamento</label>
-          <input id="name" class="form-control" type="text" formControlName="name">
+                    <app-form-field-error [form-control]="resourceForm.get('type')"></app-form-field-error>
 
-          <app-form-field-error [form-control]="resourceForm.get('name')"></app-form-field-error>
-         
-        </div> 
+                </div>
+                <!-- Nome -->
+                <div class="formGroup col-md-5">
+                    <label for="name">Lançamento</label>
+                    <input id="name" class="form-control" type="text" formControlName="name">
 
-        <!-- Valor -->
-        <div class="formGroup col-md-3">
-          <label for="amount">Valor</label>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text">R$</span>
+                    <app-form-field-error [form-control]="resourceForm.get('name')"></app-form-field-error>
+
+                </div>
+
+                <!-- Valor -->
+                <div class="formGroup col-md-3">
+                    <label for="amount">Valor</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">R$</span>
+                        </div>
+                        <input [imask]="imaskConfig" id="amount" class="form-control text-right" type="text" formControlName="amount">
+                    </div>
+                    <app-form-field-error [form-control]="resourceForm.get('amount')"></app-form-field-error>
+
+                </div>
+
+                <!-- Data -->
+                <div class="formGroup col-md-2">
+                    <label for="date">Data</label>
+                    <p-calendar id="date" formControlName="date" inputStyleClass="form-control text-right" dataType="string" dateFormat="dd/mm/yy" [locale]="ptBR" [showButtonBar]="true">
+                    </p-calendar>
+                    <app-form-field-error [form-control]="resourceForm.get('date')"></app-form-field-error>
+                </div>
+
             </div>
-            <input [imask]="imaskConfig" id="amount" class="form-control text-right" type="text" formControlName="amount">
-          </div>
-          <app-form-field-error [form-control]="resourceForm.get('amount')"></app-form-field-error>
-         
-        </div>
+            <div class="form-row">
+                <!-- paid -->
+                <div class="formGroup col-md-2">
+                    <label for="paid">Pago</label>
+                    <div class="btn-group">
+                        <label (click)="resourceForm.get('paid').setValue(true)" [class.active]="resourceForm.get('paid').value == true" class="btn btn-outline-info">Pago</label>
+                        <label (click)="resourceForm.get('paid').setValue(false)" [class.active]="resourceForm.get('paid').value == false" class="btn btn-outline-info">Pendente</label>
+                    </div>
+                    <div [class.active]="resourceForm.get('paid').value == false" class="text-danger" *ngIf="resourceForm.get('paid').invalid && resourceForm.get('paid').touched">
+                        <div *ngIf="resourceForm.get('paid').errors.required"><span>Dado obrigatório</span></div>
+                    </div>
+                    <app-form-field-error [form-control]="resourceForm.get('paid')"></app-form-field-error>
+                </div>
 
-        <!-- Data -->
-        <div class="formGroup col-md-2">
-          <label for="date">Data</label>
-          <p-calendar
-            id="date"
-            formControlName="date"
-            inputStyleClass="form-control text-right"
-            dataType="string"
-            dateFormat="dd/mm/yy"
-            [locale]="ptBR"
-            [showButtonBar]="true">
-          </p-calendar>
-          <app-form-field-error [form-control]="resourceForm.get('date')"></app-form-field-error>
-        </div>
-
-      </div>
-      <div class="form-row">
-        <!-- paid -->
-        <div class="formGroup col-md-2">
-          <label for="paid">Pago</label>
-          <div class="btn-group">
-            <label (click)="resourceForm.get('paid').setValue(true)" [class.active]="resourceForm.get('paid').value == true" class="btn btn-outline-info">Pago</label>
-            <label (click)="resourceForm.get('paid').setValue(false)" [class.active]="resourceForm.get('paid').value == false" class="btn btn-outline-info">Pendente</label>
-          </div>
-          <div [class.active]="resourceForm.get('paid').value == false" class="text-danger" *ngIf="resourceForm.get('paid').invalid && resourceForm.get('paid').touched">
-            <div *ngIf="resourceForm.get('paid').errors.required"><span>Dado obrigatório</span></div>
-          </div>
-          <app-form-field-error [form-control]="resourceForm.get('paid')"></app-form-field-error>
-        </div>
-
-        <!-- CategoryId -->
-        <div class="formGroup col-md-3">
-          <label for="categoryId">Tipo</label>
-          <select name="categoryId" id="categoryId" class="form-control" formControlName="categoryId">
+                <!-- CategoryId -->
+                <div class="formGroup col-md-3">
+                    <label for="categoryId">Tipo</label>
+                    <select name="categoryId" id="categoryId" class="form-control" formControlName="categoryId">
             <option *ngFor="let category of categories" [value]="category.id">{{category.name}}</option>
           </select>
-          <app-form-field-error [form-control]="resourceForm.get('categoryId')"></app-form-field-error>
+                    <app-form-field-error [form-control]="resourceForm.get('categoryId')"></app-form-field-error>
+                </div>
+
+                <!-- Descrição -->
+                <div class="formGroup col-md-7">
+                    <label for="description">Descrição</label>
+                    <input id="description" class="form-control" type="text" formControlName="description">
+                    <app-form-field-error [form-control]="resourceForm.get('description')"></app-form-field-error>
+                </div>
+            </div>
         </div>
-        
-        <!-- Descrição -->
-        <div class="formGroup col-md-7">
-          <label for="description">Descrição</label>
-          <input id="description" class="form-control" type="text" formControlName="description">
-          <app-form-field-error [form-control]="resourceForm.get('description')"></app-form-field-error>
+        <div class="card-footer">
+            <button [disabled]="submittingForm || resourceForm.invalid" class="btn btn-primary btn-lg float-right" type="submit">Salvar</button>
         </div>
-      </div>
     </div>
-    <div class="card-footer">
-      <button [disabled]="submittingForm || resourceForm.invalid" class="btn btn-primary btn-lg float-right" type="submit">Salvar</button>
-    </div>
-  </div>
 </form>
 
-<div class="alert alert-danger mt-5" *ngIf="serverErrorMenssages">
-  <strong>Erro no Servidor: </strong>
-
-  <ul class="list-action">
-    <li *ngFor="let error of serverErrorMenssages">{{error}}</li>
-  </ul>
-</div>
+<app-server-error-messages [server-error-menssages]="serverErrorMenssages"></app-server-error-messages>
 
 <!-- <pre>
   {{resourceForm.value | json}}
