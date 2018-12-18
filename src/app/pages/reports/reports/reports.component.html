@@ -76,6 +76,10 @@
 <hr>
 
 <div class="row my-5">
-    <div class="col-md-6">GRÁFICOS DE RECEITAS</div>
-    <div class="col-md-6">GRÁFICOS DE DESPESAS</div>
+    <div class="col-md-6">
+        <p-chart type="bar" [data]="revenueChartData" [options]="chartOptions"></p-chart>
+    </div>
+    <div class="col-md-6">
+        <p-chart type="bar" [data]="expenseChartData" [options]="chartOptions"></p-chart>
+    </div>
 </div>

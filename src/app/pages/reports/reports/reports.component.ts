@@ -84,11 +84,16 @@ export class ReportsComponent implements OnInit {
   }
 
   private setChartDate() {
+    this.revenueChartData = this.getChartData('revenue', 'Gráfico de Receitas', '#9CCC65');
+    this.expenseChartData = this.getChartData('expense', 'Gráfico de Despesas', '#e03131');
+  }
+
+  private getChartData(entryType: string, title: string, color: string) {
     const chartData = [];
     // filtering entry by category and type
     this.categories.forEach(category => {
       // tslint:disable-next-line:triple-equals
-      const filteredEntries = this.entries.filter(entry => (entry.categoryId == category.id) && (entry.type == 'revenue'));
+      const filteredEntries = this.entries.filter(entry => (entry.categoryId == category.id) && (entry.type == entryType));
       // if found EntriesModule, then sum entries amount and add to ChartData
       if (filteredEntries.length > 0) {
         const totalAmount = filteredEntries.reduce(
@@ -101,12 +106,12 @@ export class ReportsComponent implements OnInit {
       }
     });
 
-    this.revenueChartData = {
-      labels: [chartData.map(item => item.categoryName)],
+    return {
+      labels: chartData.map(item => item.categoryName),
       datasets: [
         {
-          label: 'Gráficos de Receitas',
-          backgrounsColor: '#9CCC650',
+          label: title,
+          backgroundColor: color,
           data: chartData.map(item => item.totalAmount)
         }],
     };
