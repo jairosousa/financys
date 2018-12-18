@@ -36,8 +36,8 @@ export class EntryService extends BaseResourceService<Entry> {
   private filterByMontAndYear(entries: Entry[], month: number, year: number) {
     return entries.filter(entry => {
       const entryDate = moment(entry.date, 'DD/MM/YYYY');
-      const monthMacthes = entryDate.month() + 1 === month;
-      const yearMacthes = entryDate.year() === year;
+      const monthMacthes = entryDate.month() + 1 == month;
+      const yearMacthes = entryDate.year() == year;
 
       if (monthMacthes && yearMacthes) { return entry; }
 

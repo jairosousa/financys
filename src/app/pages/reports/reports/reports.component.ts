@@ -5,7 +5,8 @@ import { Entry } from '../../entries/shared/entry.model';
 import { EntryService } from '../../entries/shared/entry.service';
 import { CategoryService } from '../../categories/shared/category.service';
 
-import currencyFormatter from 'currency-formatter';
+import currencyFormatter from '../../../../../node_modules/currency-formatter';
+
 @Component({
   selector: 'app-reports',
   templateUrl: './reports.component.html',
@@ -39,11 +40,12 @@ export class ReportsComponent implements OnInit {
   constructor(
     private entryService: EntryService,
     private categoryService: CategoryService
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.categoryService.getAll()
-    .subscribe(categories => this.categories = categories);
+      .subscribe(categories => this.categories = categories);
   }
 
   generateReports() {
@@ -55,8 +57,58 @@ export class ReportsComponent implements OnInit {
       alert('Você precisa selecionar o Mês e o Ano para gerar os relatórios');
     } else {
       this.entryService.getByMontAndYear(month, year)
-        .subscribe(entries => this.entries = entries);
+        .subscribe(this.setValues.bind(this));
     }
   }
 
+  private setValues(entries: Entry[]) {
+    this.entries = entries;
+    this.calculateBalance();
+    this.setChartDate();
+  }
+
+  private calculateBalance() {
+    let expenseTotal = 0;
+    let revenueTotal = 0;
+    this.entries.forEach(entry => {
+      if (entry.type === 'revenue') {
+        revenueTotal += currencyFormatter.unformat(entry.amount, { code: 'BRL' });
+      } else {
+        expenseTotal += currencyFormatter.unformat(entry.amount, { code: 'BRL' });
+      }
+    });
+
+    this.expenseTotal = currencyFormatter.format(expenseTotal, { code: 'BRL' });
+    this.revenueTotal = currencyFormatter.format(revenueTotal, { code: 'BRL' });
+    this.balance = currencyFormatter.format(revenueTotal - expenseTotal, { code: 'BRL' });
+  }
+
+  private setChartDate() {
+    const chartData = [];
+    // filtering entry by category and type
+    this.categories.forEach(category => {
+      // tslint:disable-next-line:triple-equals
+      const filteredEntries = this.entries.filter(entry => (entry.categoryId == category.id) && (entry.type == 'revenue'));
+      // if found EntriesModule, then sum entries amount and add to ChartData
+      if (filteredEntries.length > 0) {
+        const totalAmount = filteredEntries.reduce(
+          (total, entry) => total + currencyFormatter.unformat(entry.amount, { code: 'BRL' }), 0
+        );
+        chartData.push({
+          categoryName: category.name,
+          totalAmount: totalAmount
+        });
+      }
+    });
+
+    this.revenueChartData = {
+      labels: [chartData.map(item => item.categoryName)],
+      datasets: [
+        {
+          label: 'Gráficos de Receitas',
+          backgrounsColor: '#9CCC650',
+          data: chartData.map(item => item.totalAmount)
+        }],
+    };
+  }
 }
